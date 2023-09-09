@@ -1,0 +1,68 @@
+diff --git a/src/macappkit.m b/src/macappkit.m
+index dd210d9793..7db6e73e6f 100644
+--- a/src/macappkit.m
++++ b/src/macappkit.m
+@@ -593,6 +593,11 @@ - (BOOL)containsDock
+     }
+ }
+ 
++- (int)maybeAutoHideMenuBar
++{
++  return (self.safeAreaInsets.top > 0) ? 0 : NSApplicationPresentationAutoHideMenuBar;
++}
++
+ - (BOOL)canShowMenuBar
+ {
+   return ([self isEqual:NSScreen.screens[0]]
+@@ -1833,7 +1838,7 @@ - (void)updatePresentationOptions
+ 
+ 	  if ([screen canShowMenuBar])
+ 	    {
+-	      options = NSApplicationPresentationAutoHideMenuBar;
++	      options = [screen maybeAutoHideMenuBar];
+ 	      if (!can_auto_hide_menu_bar_without_hiding_dock_p ()
+ 		  || [screen containsDock])
+ 		options |= NSApplicationPresentationAutoHideDock;
+@@ -1868,7 +1873,7 @@ - (void)updatePresentationOptions
+ 
+ 		    if ([screen canShowMenuBar])
+ 		      {
+-			options |= NSApplicationPresentationAutoHideMenuBar;
++			options |= [screen maybeAutoHideMenuBar];
+ 			if (!can_auto_hide_menu_bar_without_hiding_dock_p ()
+ 			    || [screen containsDock])
+ 			  options |= NSApplicationPresentationAutoHideDock;
+@@ -2753,8 +2758,19 @@ - (NSRect)window:(NSWindow *)sender willConstrainFrame:(NSRect)frameRect
+ 		screen = [NSScreen closestScreenForRect:frameRect];
+ 	    }
+ 
++          NSEdgeInsets insets = screen.safeAreaInsets;
++          NSStatusBar *statusBar = [NSStatusBar systemStatusBar];
++          CGFloat menuBarHeight = NSHeight([statusBar statusItemWithLength:
++                                                        NSVariableStatusItemLength].button.window.frame);
+ 	  if (windowManagerState & WM_STATE_FULLSCREEN)
+-	    frameRect = screen.frame;
++            {
++             frameRect = screen.frame;
++             if (insets.top > 0)
++               {
++                 frameRect.origin.y += insets.bottom;
++                 frameRect.size.height = frameRect.size.height - menuBarHeight;
++               }
++            }
+ 	  else
+ 	    {
+ 	      NSRect screenVisibleFrame = screen.visibleFrame;
+@@ -2768,6 +2784,12 @@ - (NSRect)window:(NSWindow *)sender willConstrainFrame:(NSRect)frameRect
+ 		{
+ 		  frameRect.origin.y = screenVisibleFrame.origin.y;
+ 		  frameRect.size.height = screenVisibleFrame.size.height;
++
++                  if (insets.top > 0)
++                    {
++                      frameRect.origin.y += insets.bottom;
++                      frameRect.size.height = frameRect.size.height - menuBarHeight;
++                    }
+ 		}
+ 	    }
+ 	}
