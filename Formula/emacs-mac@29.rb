@@ -88,7 +88,7 @@ class EmacsMacAT29 < Formula
   end
 
   patch do
-    url "https://raw.githubusercontent.com/haji-ali/homebrew-emacsmacport/d9a7d1fbe821c4af45dc40fd6732a78ab3693521/patches/notch.patch"
+    url "https://raw.githubusercontent.com/haji-ali/homebrew-emacsmacport/195893971fda853f7c8c93d00f6f9b9430e04fe6/patches/notch.patch"
     sha256 "e24998001b7357cba4937c5fbf710bffebf6f82d553386889addfbedc28916a5"
   end
 
