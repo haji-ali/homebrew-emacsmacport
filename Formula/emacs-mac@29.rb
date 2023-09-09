@@ -87,6 +87,11 @@ class EmacsMacAT29 < Formula
     end
   end
 
+  patch do
+    url "https://raw.githubusercontent.com/haji-ali/homebrew-emacsmacport/d9a7d1fbe821c4af45dc40fd6732a78ab3693521/patches/notch.patch"
+    sha256 "e24998001b7357cba4937c5fbf710bffebf6f82d553386889addfbedc28916a5"
+  end
+
   if (build.with? "native-comp") || (build.with? "native-compilation")
     depends_on "libgccjit" => :recommended
     depends_on "gcc" => :build
