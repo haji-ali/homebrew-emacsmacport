@@ -11,7 +11,7 @@ end
 # emacs-plus
 
 class UrlResolver
-  HOMEBREW_EMACS_MAC_TAP_OWNER = "railwaycat"
+  HOMEBREW_EMACS_MAC_TAP_OWNER = "haji-ali"
   HOMEBREW_EMACS_MAC_TAP_REPO = "emacsmacport"
   def initialize(mode)
     tap = Tap.fetch(HOMEBREW_EMACS_MAC_TAP_OWNER, HOMEBREW_EMACS_MAC_TAP_REPO)
